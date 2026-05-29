@@ -2,6 +2,8 @@
 import streamlit as st
 # Importa base64 para convertir el video MP4 a texto compatible con HTML
 import base64
+# Importa re para buscar patrones de números dentro del texto
+import re
 
 # Importa la función que detecta funciones matemáticas dentro de la respuesta
 # y la función que genera la gráfica usando Python
@@ -126,7 +128,7 @@ section[data-testid="stSidebar"] * {
 
 .main-hero,
 .glass-panel {
-    background: rgba(5, 11, 30, 0.58);
+    background: rgba(5, 11, 30, 0.35);
     border: 1px solid rgba(56, 189, 248, 0.60);
     border-radius: 26px;
     padding: 36px;
@@ -214,7 +216,7 @@ section[data-testid="stSidebar"] * {
 }
 
 .chat-box {
-    background: rgba(2, 6, 23, 0.72);
+    background: rgba(2, 6, 23, 0.35);
     border: 1px solid rgba(56, 189, 248, 0.25);
     border-radius: 18px;
     padding: 20px;
@@ -228,7 +230,7 @@ section[data-testid="stSidebar"] * {
 }
 
 .user-bubble {
-    background: linear-gradient(90deg, rgba(37,99,235,0.55), rgba(147,51,234,0.55));
+    background: linear-gradient(90deg, rgba(37,99,235,0.45), rgba(147,51,234,0.45));
     padding: 14px 16px;
     border-radius: 14px;
     color: white;
@@ -442,7 +444,25 @@ st.html("""
 if texto_voz:
     st.session_state["texto_voz_pendiente"] = texto_voz
     st.rerun()
+    
+# Corrige de forma global números con punto como separador de miles
+def corregir_numeros_de_voz(texto):
+    # Busca números como 1.000, 5.400, 25.000, 100.000 o 1.250.000
+    patron_miles = r"\b\d{1,3}(?:\.\d{3})+\b"
 
+    # Función interna que elimina los puntos de miles
+    def quitar_puntos(coincidencia):
+        # Toma el número encontrado
+        numero = coincidencia.group(0)
+
+        # Elimina los puntos para convertirlo en número entero real
+        return numero.replace(".", "")
+
+    # Reemplaza todos los números encontrados en el texto
+    texto_corregido = re.sub(patron_miles, quitar_puntos, texto)
+
+    # Devuelve el texto corregido
+    return texto_corregido
 
 # Si el usuario limpia el historial
 if borrar_historial:
@@ -456,7 +476,9 @@ if borrar_historial:
 
 # Si el usuario envía una consulta
 if preguntar:
-    pregunta_limpia = st.session_state.pregunta.strip()
+    pregunta_limpia = corregir_numeros_de_voz(
+        st.session_state.pregunta.strip()
+    )
 
     if pregunta_limpia == "":
         st.warning("Escribe una pregunta primero o usa el botón de voz.")
