@@ -209,10 +209,6 @@ def es_tema_calculo(texto):
 # Detecta operaciones matemáticas básicas
 def contiene_operacion_basica(texto):
 
-    # Si no es cálculo ni operación matemática, se rechaza
-if not es_tema_calculo(pregunta) and not contiene_operacion_basica(pregunta):
-    return "Lo siento, solo puedo ayudarte con temas de Cálculo Matemático."
-    
     # Operadores matemáticos
     operadores = ["+", "-", "*", "/", "^", "(", ")"]
 
@@ -227,6 +223,9 @@ if not es_tema_calculo(pregunta) and not contiene_operacion_basica(pregunta):
 
 # Función principal que responde usando Gemini y el PDF
 def responder_con_gemini(pregunta):
+      # Si no es cálculo ni operación matemática, se rechaza
+    if not es_tema_calculo(pregunta) and not contiene_operacion_basica(pregunta):
+        return "Lo siento, solo puedo ayudarte con temas de Cálculo Matemático."
 
     # Detecta página numérica o especial
     pagina_etiqueta = detectar_pagina(pregunta)
