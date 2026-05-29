@@ -67,8 +67,7 @@ st.html("""
 }
 .stApp {
     background:
-        linear-gradient(rgba(2, 6, 23, 0.55), rgba(2, 6, 23, 0.78)),
-        url("https://i.imgur.com/8Km9tLL.jpeg");
+    background: transparent;
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
