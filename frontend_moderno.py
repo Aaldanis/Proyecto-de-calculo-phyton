@@ -1,5 +1,7 @@
 # Importa Streamlit para construir la interfaz web del asistente
 import streamlit as st
+# Importa base64 para convertir el video MP4 a texto compatible con HTML
+import base64
 
 # Importa la función que detecta funciones matemáticas dentro de la respuesta
 # y la función que genera la gráfica usando Python
@@ -19,13 +21,50 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+# =====================================================
+# FUNCIÓN PARA COLOCAR UN VIDEO MP4 COMO FONDO
+# =====================================================
 
+def fondo_video(video_path):
+    # Abre el archivo de video en modo binario
+    with open(video_path, "rb") as video_file:
+        # Lee todo el contenido del video
+        video_bytes = video_file.read()
+
+    # Convierte el video a formato base64
+    video_base64 = base64.b64encode(video_bytes).decode()
+
+    # Inserta el video en la página usando HTML
+    st.markdown(
+        f"""
+        <video autoplay muted loop id="video-fondo">
+            <source src="data:video/mp4;base64,{video_base64}" type="video/mp4">
+        </video>
+        """,
+        unsafe_allow_html=True
+    )
+
+
+# Ejecuta la función para colocar el video como fondo
+# El archivo debe estar en la misma carpeta que frontend_moderno.py
+fondo_video("fondo.mp4.mp4")
 
 # CSS general de la aplicación
 st.html("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Inter:wght@400;500;700;800&display=swap');
 
+/* Video de fondo de pantalla */
+#video-fondo {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
+    z-index: -100;
+    opacity: 0.35;
+}
 .stApp {
     background:
         linear-gradient(rgba(2, 6, 23, 0.55), rgba(2, 6, 23, 0.78)),
