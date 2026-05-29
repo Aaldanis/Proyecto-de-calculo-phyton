@@ -216,7 +216,6 @@ def es_tema_calculo(texto):
         "raíz",
         "logaritmo",
         "trigonometria",
-        "trigonometría"
         "sabes",
         "haces",
         "hacer",
@@ -253,8 +252,8 @@ def responder_con_gemini(pregunta):
         not es_tema_calculo(pregunta)
         and not contiene_operacion_basica(pregunta)
         and not es_referencia_libro(pregunta)
-        ):
-    return "Lo siento, solo puedo ayudarte con temas de Cálculo Matemático."
+    ):
+        return "Lo siento, solo puedo ayudarte con temas de Cálculo Matemático."
 
     # Detecta página numérica o especial
     pagina_etiqueta = detectar_pagina(pregunta)
