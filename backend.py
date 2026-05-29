@@ -322,7 +322,9 @@ Reglas:
 5. Usa LaTeX compatible con Streamlit.
 6. Usa $ ... $ para fórmulas pequeñas.
 7. Usa $$ ... $$ para fórmulas grandes.
-8. En preguntas conceptuales de Cálculo 1, siempre incluye al menos una fórmula matemática importante en LaTeX.
+8. Cuando analices ejercicios desde imagen, revisa cuidadosamente radicales, raíces cuadradas, raíces cúbicas, exponentes fraccionarios y denominadores. No conviertas una raíz en una potencia entera. Si aparece √ o ∛, debes conservarlo en LaTeX.
+9. Antes de resolver, reescribe exactamente el ejercicio original en LaTeX respetando raíces, exponentes, fracciones y variables.
+10. En preguntas conceptuales de Cálculo 1, siempre incluye al menos una fórmula matemática importante en LaTeX.
 
 Formato visual obligatorio:
 - Usa títulos Markdown como:
