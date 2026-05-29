@@ -152,7 +152,12 @@ col_texto, col_acciones = st.columns([4, 1.15], vertical_alignment="bottom")
 
 # Columna izquierda: caja de texto
 with col_texto:
-
+    # Si hay texto pendiente del micrófono, se coloca antes de crear el text_area
+    if "texto_voz_pendiente" in st.session_state:
+        # Copia el texto reconocido hacia la caja de pregunta
+        st.session_state["pregunta"] = st.session_state["texto_voz_pendiente"]
+        # Elimina la variable temporal
+        del st.session_state["texto_voz_pendiente"]
     # Caja donde el usuario escribe su pregunta
     # Se usa key="pregunta" para que Streamlit guarde el texto automáticamente
     st.text_area(
@@ -191,8 +196,11 @@ st.markdown('</div>', unsafe_allow_html=True)
 # ACCIONES
 # =====================================================
 
+# Si el usuario habló por micrófono
 if texto_voz:
-    st.session_state.pregunta = texto_voz
+    # Guarda el texto de voz en una variable temporal
+    st.session_state["texto_voz_pendiente"] = texto_voz
+    # Recarga la app para colocar el texto antes de crear el text_area
     st.rerun()
 
 
