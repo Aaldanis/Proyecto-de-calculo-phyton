@@ -247,14 +247,35 @@ def contiene_operacion_basica(texto):
 
 # Función principal que responde usando Gemini y el PDF
 def responder_con_gemini(pregunta):
-      # Si no es cálculo ni operación matemática, se rechaza
+    # Si no es cálculo ni operación matemática, se rechaza
     if (
         not es_tema_calculo(pregunta)
         and not contiene_operacion_basica(pregunta)
         and not es_referencia_libro(pregunta)
     ):
         return "Lo siento, solo puedo ayudarte con temas de Cálculo Matemático."
+        
+    # Resolver operaciones matemáticas básicas directamente
+    if contiene_operacion_basica(pregunta):
 
+        try:
+            expresion = pregunta.replace("^", "**")
+    
+            resultado = eval(expresion)
+
+            return f"""
+    ## Operación matemática
+
+    $$
+    {pregunta} = {resultado}
+    $$
+
+    ## Respuesta final
+
+    **El resultado es {resultado}.**
+    """
+        except:
+            pass
     # Detecta página numérica o especial
     pagina_etiqueta = detectar_pagina(pregunta)
 
@@ -409,6 +430,8 @@ REGLAS ABSOLUTAS — NO NEGOCIABLES:
 4. Si hay material de referencia disponible, úsalo para fundamentar tus respuestas en este caso es el pdf utilizado.
 5. Si el PDF no contiene suficiente información, usa conocimiento general de Cálculo 1 para completar la explicación correctamente.
 6. Procura siempre dar las formulas necesarias usa el pdf como referencia para buscar formulas para mostrarlas al usuario.
+7. Si el usuario escribe algo corto como "2/16", "3/5" o expresiones ambiguas, interpreta primero si es una operación matemática válida antes de asumir que el mensaje está incompleto.
+8. Si la expresión contiene únicamente números y operadores matemáticos, resuélvela directamente como operación matemática.
 
 Formato visual obligatorio:
 - Usa títulos con Markdown, por ejemplo: ## Ejercicio, ## Procedimiento, ## Respuesta final.
