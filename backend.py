@@ -137,7 +137,7 @@ def manejar_error_gemini(error):
 
     if "503" in error_texto or "UNAVAILABLE" in error_texto:
         return (
-            "Gemini está saturado temporalmente.\n\n"
+            "Nos encontramos saturados temporalmente.\n\n"
             "Intenta nuevamente en unos segundos."
         )
 
