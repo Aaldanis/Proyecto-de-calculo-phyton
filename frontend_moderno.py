@@ -121,11 +121,14 @@ else:
         # Muestra la etiqueta del asistente
         st.markdown('<div class="msg-label">Asistente</div>', unsafe_allow_html=True)
 
-        # Muestra la respuesta del asistente
-        st.markdown(
-            f'<div class="bot-bubble">{mensaje["respuesta"]}</div>',
-            unsafe_allow_html=True
-        )
+       # Burbuja visual del asistente
+        st.markdown('<div class="bot-bubble">', unsafe_allow_html=True)
+
+        # Respuesta REAL con Markdown y LaTeX
+        st.markdown(mensaje["respuesta"])
+
+        # Cierre visual
+        st.markdown('</div>', unsafe_allow_html=True)
 
         # Obtiene la función detectada para graficar, si existe
         funcion_grafica = mensaje.get("funcion_grafica")
