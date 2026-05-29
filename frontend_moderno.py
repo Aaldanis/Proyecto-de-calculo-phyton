@@ -236,7 +236,7 @@ if preguntar:
             
             # Si existe la pregunta en memoria, se elimina para limpiar la caja de texto
             if "pregunta" in st.session_state:
-            del st.session_state["pregunta"]
+                del st.session_state["pregunta"]
 
             # Recarga la interfaz para mostrar la respuesta nueva
             st.rerun()
