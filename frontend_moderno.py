@@ -150,7 +150,11 @@ st.markdown('<div class="section-title">Realiza una consulta</div>', unsafe_allo
 col_texto, col_acciones = st.columns([4, 1.15], vertical_alignment="bottom")
 
 
+# Columna izquierda: caja de texto
 with col_texto:
+
+    # Caja donde el usuario escribe su pregunta
+    # Se usa key="pregunta" para que Streamlit guarde el texto automáticamente
     st.text_area(
         "Escribe tu pregunta:",
         key="pregunta",
@@ -192,9 +196,17 @@ if texto_voz:
     st.rerun()
 
 
+# Si el usuario presiona el botón de limpiar historial
 if borrar_historial:
+
+    # Limpia el historial completo
     st.session_state.historial = []
-    st.session_state.pregunta = ""
+
+    # Si existe texto escrito en la caja, se elimina correctamente
+    if "pregunta" in st.session_state:
+        del st.session_state["pregunta"]
+
+    # Recarga la interfaz
     st.rerun()
 
 
@@ -221,8 +233,12 @@ if preguntar:
                 "funcion_grafica": funcion_grafica
             })
 
-            st.session_state.pregunta = ""
+            
+            # Si existe la pregunta en memoria, se elimina para limpiar la caja de texto
+            if "pregunta" in st.session_state:
+            del st.session_state["pregunta"]
 
+            # Recarga la interfaz para mostrar la respuesta nueva
             st.rerun()
 
         except Exception as error:
