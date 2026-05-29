@@ -69,6 +69,13 @@ st.html("""
     pointer-events: none;
 }
 
+/* Ajuste exclusivo para celulares */
+@media (max-width: 768px) {
+    #video-fondo {
+        object-position: 65% center;
+    }
+}
+
 /* Hace transparente el fondo de Streamlit */
 .stApp {
     background: transparent !important;
