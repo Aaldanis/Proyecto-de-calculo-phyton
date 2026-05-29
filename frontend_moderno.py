@@ -72,7 +72,7 @@ st.html("""
 /* Ajuste exclusivo para celulares */
 @media (max-width: 768px) {
     #video-fondo {
-        object-position: 65% center;
+        object-position: 55% center;
     }
 }
 
