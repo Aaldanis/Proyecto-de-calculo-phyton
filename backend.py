@@ -90,7 +90,23 @@ def detectar_pagina(pregunta):
 
     # Si no encuentra página, devuelve None
     return None
+def es_referencia_libro(texto):
 
+    texto = texto.lower()
+
+    patrones = [
+        r"p[aá]gina\s+\d+",
+        r"problema\s+\d+",
+        r"ejercicio\s+\d+",
+        r"n[uú]mero\s+\d+",
+        r"\b\d+\b"
+    ]
+
+    for patron in patrones:
+        if re.search(patron, texto):
+            return True
+
+    return False
 
 # Función para buscar información dentro del PDF vectorizado
 def buscar_en_pdf(pregunta):
@@ -202,14 +218,14 @@ def es_tema_calculo(texto):
         "trigonometria",
         "trigonometría"
         "sabes",
-    "haces",
-    "hacer",
-    "ayudas",
-    "ayudar",
-    "puedes",
-    "funciones",
-    "explicas",
-    "resolver",
+        "haces",
+        "hacer",
+        "ayudas",
+        "ayudar",
+        "puedes",
+        "funciones",
+        "explicas",
+        "resolver",
     ]
 
     # Verifica si alguna palabra está presente
@@ -233,8 +249,12 @@ def contiene_operacion_basica(texto):
 # Función principal que responde usando Gemini y el PDF
 def responder_con_gemini(pregunta):
       # Si no es cálculo ni operación matemática, se rechaza
-    if not es_tema_calculo(pregunta) and not contiene_operacion_basica(pregunta):
-        return "Lo siento, solo puedo ayudarte con temas de Cálculo Matemático."
+    if (
+        not es_tema_calculo(pregunta)
+        and not contiene_operacion_basica(pregunta)
+        and not es_referencia_libro(pregunta)
+        ):
+    return "Lo siento, solo puedo ayudarte con temas de Cálculo Matemático."
 
     # Detecta página numérica o especial
     pagina_etiqueta = detectar_pagina(pregunta)
