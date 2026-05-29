@@ -171,6 +171,59 @@ def manejar_error_gemini(error):
     # Otro error
     return f"Ocurrió un error al generar la respuesta: {error}"
 
+# Detecta si la pregunta pertenece a cálculo matemático
+def es_tema_calculo(texto):
+
+    # Convierte el texto a minúsculas
+    texto = texto.lower()
+
+    # Palabras relacionadas con cálculo
+    palabras_calculo = [
+        "calculo",
+        "cálculo",
+        "derivada",
+        "integral",
+        "limite",
+        "límite",
+        "funcion",
+        "función",
+        "ecuacion",
+        "ecuación",
+        "grafica",
+        "gráfica",
+        "resolver",
+        "matematica",
+        "matemática",
+        "fraccion",
+        "fracción",
+        "raiz",
+        "raíz",
+        "logaritmo",
+        "trigonometria",
+        "trigonometría"
+    ]
+
+    # Verifica si alguna palabra está presente
+    return any(palabra in texto for palabra in palabras_calculo)
+
+# Detecta operaciones matemáticas básicas
+def contiene_operacion_basica(texto):
+
+    # Si no es cálculo ni operación matemática, se rechaza
+if not es_tema_calculo(pregunta) and not contiene_operacion_basica(pregunta):
+    return "Lo siento, solo puedo ayudarte con temas de Cálculo Matemático."
+    
+    # Operadores matemáticos
+    operadores = ["+", "-", "*", "/", "^", "(", ")"]
+
+    # Verifica si hay números
+    tiene_numero = any(caracter.isdigit() for caracter in texto)
+
+    # Verifica si hay operadores
+    tiene_operador = any(operador in texto for operador in operadores)
+
+    # Devuelve True si parece operación matemática
+    return tiene_numero and tiene_operador
 
 # Función principal que responde usando Gemini y el PDF
 def responder_con_gemini(pregunta):
