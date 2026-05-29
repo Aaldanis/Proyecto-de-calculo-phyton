@@ -201,6 +201,15 @@ def es_tema_calculo(texto):
         "logaritmo",
         "trigonometria",
         "trigonometría"
+        "sabes",
+    "haces",
+    "hacer",
+    "ayudas",
+    "ayudar",
+    "puedes",
+    "funciones",
+    "explicas",
+    "resolver",
     ]
 
     # Verifica si alguna palabra está presente
