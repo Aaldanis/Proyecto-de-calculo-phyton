@@ -104,7 +104,7 @@ else:
 
     # Recorre el historial en orden inverso
     # Así la respuesta más reciente aparece primero
-    for mensaje in reversed(st.session_state.historial):
+    for mensaje in st.session_state.historial:
 
         # Abre una caja para cada conversación
         st.markdown('<div class="chat-box">', unsafe_allow_html=True)
