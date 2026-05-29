@@ -54,30 +54,48 @@ st.html("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Inter:wght@400;500;700;800&display=swap');
 
-/* Video de fondo de pantalla */
+/* Video de fondo fijo */
 #video-fondo {
     position: fixed;
-    right: 0;
-    bottom: 0;
-    min-width: 100%;
-    min-height: 100%;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     object-fit: cover;
-    z-index: -100;
-    opacity: 0.35;
+    z-index: 0;
+    opacity: 0.45;
+    pointer-events: none;
 }
+
+/* Hace transparente el fondo de Streamlit */
 .stApp {
-    background:
-    background: transparent;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    background: transparent !important;
     color: white;
 }
 
+/* Coloca el contenido encima del video */
+[data-testid="stAppViewContainer"] {
+    background: transparent !important;
+    position: relative;
+    z-index: 1;
+}
+
+/* Evita que el fondo negro tape el video */
+[data-testid="stAppViewContainer"] > .main {
+    background: transparent !important;
+}
+
+/* Sidebar encima del video */
+section[data-testid="stSidebar"] {
+    z-index: 2;
+}
+
 .block-container {
-    max-width: 980px;
+    width: min(92vw, 1150px);
+    max-width: none;
     padding-top: 3rem;
     padding-bottom: 3rem;
+    margin: auto;
 }
 
 section[data-testid="stSidebar"] {
