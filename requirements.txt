@@ -1,0 +1,10 @@
+streamlit
+streamlit-mic-recorder
+google-genai
+python-dotenv
+chromadb
+sentence-transformers
+pymupdf
+sympy
+matplotlib
+numpy
