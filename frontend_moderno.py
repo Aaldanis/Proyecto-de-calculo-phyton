@@ -151,10 +151,9 @@ col_texto, col_acciones = st.columns([4, 1.15], vertical_alignment="bottom")
 
 
 with col_texto:
-
-    st.session_state.pregunta = st.text_area(
+    st.text_area(
         "Escribe tu pregunta:",
-        value=st.session_state.pregunta,
+        key="pregunta",
         placeholder="Ejemplo: Explícame cómo derivar x^2 + 3x o grafica y = x**2 - 4",
         height=120
     )
