@@ -126,7 +126,7 @@ section[data-testid="stSidebar"] * {
 
 .main-hero,
 .glass-panel {
-    background: rgba(5, 11, 30, 0.84);
+    background: rgba(5, 11, 30, 0.58);
     border: 1px solid rgba(56, 189, 248, 0.60);
     border-radius: 26px;
     padding: 36px;
@@ -177,7 +177,7 @@ section[data-testid="stSidebar"] * {
 }
 
 .feature-card {
-    background: rgba(8, 13, 32, 0.88);
+    background: rgba(8, 13, 32, 0.45);
     border: 1px solid rgba(168, 85, 247, 0.55);
     border-radius: 18px;
     padding: 22px;
@@ -205,7 +205,7 @@ section[data-testid="stSidebar"] * {
 }
 
 .empty-chat {
-    background: rgba(2, 6, 23, 0.75);
+    background: rgba(2, 6, 23, 0.45);
     border: 1px solid rgba(148, 163, 184, 0.20);
     border-radius: 18px;
     padding: 22px;
