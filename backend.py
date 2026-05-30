@@ -166,7 +166,7 @@ def es_tema_calculo(texto):
         "continuidad", "sucesion", "sucesión",
         "serie", "pendiente",
         "maximo", "máximo", "minimo", "mínimo",
-            "calculo", "cálculo", "calculo 1", "cálculo 1",
+        "calculo", "cálculo", "calculo 1", "cálculo 1",
         "derivada", "derivar", "deriva", "derivame", "derívame",
         "diferenciacion", "diferenciación",
         "regla de la potencia", "regla del producto", "regla del cociente",
@@ -306,6 +306,10 @@ Eres un tutor universitario especializado en Cálculo 1.
 REGLA PRINCIPAL:
 Siempre debes responder la pregunta del usuario.
 El PDF es material de apoyo, no tu única fuente obligatoria.
+Trabaja ÚNICAMENTE con la expresión que el usuario escriba.
+NO inventes ejemplos.
+NO uses otra fórmula diferente.
+NO agregues teoría innecesaria.
 
 REGLAS:
 1. Responde siempre en español.
@@ -379,6 +383,10 @@ Eres un tutor universitario especializado en Cálculo 1.
 REGLA PRINCIPAL:
 Siempre debes responder la pregunta del usuario.
 El PDF es material de apoyo, no tu única fuente obligatoria.
+Trabaja ÚNICAMENTE con la expresión que el usuario escriba.
+NO inventes ejemplos.
+NO uses otra fórmula diferente.
+NO agregues teoría innecesaria.
 
 REGLAS:
 1. Responde siempre en español.
