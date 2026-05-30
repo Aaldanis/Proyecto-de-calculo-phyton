@@ -282,7 +282,7 @@ textarea {
 # =====================================================
 
 with st.sidebar:
-    st.html('<div class="sidebar-title">🧠 Aldanis AI</div>')
+    st.html('<div class="sidebar-title">Calculo</div>')
     st.html('<div class="nav-item">🏠 Inicio</div>')
     st.html('<div class="nav-item">🎙 Entrada por voz</div>')
     st.html('<div class="nav-item">∑ Enfoque matemático</div>')
