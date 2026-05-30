@@ -7,7 +7,7 @@ import re
 # Importa funciones para detectar y crear gráficas matemáticas
 from graficador import extraer_funcion_para_graficar, crear_grafica
 
-# Importa la herramienta para convertir voz a texto
+# Importa la herramienta para convertir voz a textoa
 from streamlit_mic_recorder import speech_to_text
 
 # Importa la función del backend que conecta con Gemini
@@ -273,7 +273,7 @@ textarea {
 # =====================================================
 
 with st.sidebar:
-    st.html('<div class="sidebar-title">🧠 Aldanis AI</div>')
+    st.html('<div class="sidebar-title">Calculo</div>')
     st.html('<div class="nav-item">🏠 Inicio</div>')
     st.html('<div class="nav-item">🎙 Entrada por voz</div>')
     st.html('<div class="nav-item">∑ Enfoque matemático</div>')
