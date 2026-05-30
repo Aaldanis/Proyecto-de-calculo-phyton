@@ -8,7 +8,7 @@ import re
 from graficador import extraer_funcion_para_graficar, crear_grafica
 
 # Importa la herramienta para convertir voz a texto
-from streamlit_mic_recorder import speech_to_text
+from streamlit_mic_recorder import mic_recorder
 
 # Importa la función del backend que conecta con Gemini
 from backend import responder_con_gemini
@@ -396,13 +396,14 @@ with col_texto:
     )
 
 with col_acciones:
-    texto_voz = speech_to_text(
-        language="es",
+     audio = mic_recorder(
         start_prompt="🎤 Hablar",
         stop_prompt="⏹️ Detener",
         just_once=True,
         key="voz"
-    )
+)
+
+st.write(audio)
 
     preguntar = st.button("Enviar consulta", use_container_width=True)
     borrar_historial = st.button("Limpiar chat", use_container_width=True)
