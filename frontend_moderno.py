@@ -28,12 +28,20 @@ st.set_page_config(
 # =====================================================
 
 def fondo_video():
-    # Inserta el video local como fondo.
-    # El archivo debe estar en la misma carpeta que frontend_moderno.py
+    # URL directa del video subido en GitHub
+    # Se usa raw.githubusercontent para que Streamlit pueda cargarlo correctamente
+    video_url = "https://raw.githubusercontent.com/Aaldanis/Proyecto-de-calculo-phyton/cambios-prueba/fondo.mp4.mp4"
+
+    # Inserta el video como fondo
+    # autoplay: inicia solo
+    # muted: necesario para que autoplay funcione
+    # loop: repite el video
+    # playsinline: evita que el celular lo abra en pantalla completa
+    # preload="auto": intenta precargarlo para que no quede negro
     st.markdown(
-        """
+        f"""
         <video autoplay muted loop playsinline preload="auto" id="video-fondo">
-            <source src="fondo.mp4.mp4" type="video/mp4">
+            <source src="{video_url}" type="video/mp4">
         </video>
         """,
         unsafe_allow_html=True
