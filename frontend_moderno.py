@@ -1,18 +1,16 @@
 # Importa Streamlit para construir la interfaz web del asistente
 import streamlit as st
-# Importa base64 para convertir el video MP4 a texto compatible con HTML
-import base64
-# Importa re para buscar patrones de números dentro del texto
+
+# Importa re para corregir números con puntos de miles
 import re
 
-# Importa la función que detecta funciones matemáticas dentro de la respuesta
-# y la función que genera la gráfica usando Python
+# Importa funciones para detectar y crear gráficas matemáticas
 from graficador import extraer_funcion_para_graficar, crear_grafica
 
-# Importa la herramienta que permite convertir voz a texto dentro de Streamlit
+# Importa la herramienta para convertir voz a texto
 from streamlit_mic_recorder import speech_to_text
 
-# Importa la función del backend que conecta con Gemini para generar respuestas
+# Importa la función del backend que conecta con Gemini
 from backend import responder_con_gemini
 
 
@@ -23,40 +21,39 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+
 # =====================================================
-# FUNCIÓN PARA COLOCAR UN VIDEO MP4 COMO FONDO
+# FUNCIÓN PARA COLOCAR VIDEO DE FONDO OPTIMIZADO
 # =====================================================
 
-def fondo_video(video_path):
-    # Abre el archivo de video en modo binario
-    with open(video_path, "rb") as video_file:
-        # Lee todo el contenido del video
-        video_bytes = video_file.read()
+def fondo_video():
+    # URL directa del video en GitHub
+    # IMPORTANTE: el archivo debe llamarse fondo.mp4.mp4
+    video_url = "https://raw.githubusercontent.com/Aaldanis/Proyecto-de-calculo-phyton/cambios-prueba/fondo.mp4.mp4"
 
-    # Convierte el video a formato base64
-    video_base64 = base64.b64encode(video_bytes).decode()
-
-    # Inserta el video en la página usando HTML
-    st.markdown(
+    # Inserta el video como fondo sin convertirlo a base64
+    st.html(
         f"""
-        <video autoplay muted loop id="video-fondo">
-            <source src="data:video/mp4;base64,{video_base64}" type="video/mp4">
+        <video autoplay muted loop playsinline id="video-fondo">
+            <source src="{video_url}" type="video/mp4">
         </video>
-        """,
-        unsafe_allow_html=True
+        """
     )
 
 
-# Ejecuta la función para colocar el video como fondo
-# El archivo debe estar en la misma carpeta que frontend_moderno.py
-fondo_video("fondo.mp4.mp4")
+# Ejecuta el video de fondo
+fondo_video()
 
-# CSS general de la aplicación
+
+# =====================================================
+# ESTILOS CSS DE LA INTERFAZ
+# =====================================================
+
 st.html("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Inter:wght@400;500;700;800&display=swap');
 
-/* Video de fondo fijo */
 #video-fondo {
     position: fixed;
     top: 0;
@@ -64,39 +61,41 @@ st.html("""
     width: 100vw;
     height: 100vh;
     object-fit: cover;
+    object-position: center center;
     z-index: 0;
     opacity: 0.45;
     pointer-events: none;
 }
 
-/* Ajuste exclusivo para celulares */
 @media (max-width: 768px) {
     #video-fondo {
         object-position: 75% center;
     }
 }
 
-/* Hace transparente el fondo de Streamlit */
 .stApp {
     background: transparent !important;
     color: white;
 }
 
-/* Coloca el contenido encima del video */
 [data-testid="stAppViewContainer"] {
     background: transparent !important;
     position: relative;
     z-index: 1;
 }
 
-/* Evita que el fondo negro tape el video */
 [data-testid="stAppViewContainer"] > .main {
     background: transparent !important;
 }
 
-/* Sidebar encima del video */
 section[data-testid="stSidebar"] {
     z-index: 2;
+    background: rgba(3, 7, 18, 0.94);
+    border-right: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+section[data-testid="stSidebar"] * {
+    color: white;
 }
 
 .block-container {
@@ -105,15 +104,6 @@ section[data-testid="stSidebar"] {
     padding-top: 3rem;
     padding-bottom: 3rem;
     margin: auto;
-}
-
-section[data-testid="stSidebar"] {
-    background: rgba(3, 7, 18, 0.94);
-    border-right: 1px solid rgba(56, 189, 248, 0.35);
-}
-
-section[data-testid="stSidebar"] * {
-    color: white;
 }
 
 .sidebar-title {
@@ -162,7 +152,7 @@ section[data-testid="stSidebar"] * {
     font-size: 46px;
     line-height: 1.05;
     font-weight: 900;
-    color: #ffffff;
+    color: white;
     margin-bottom: 18px;
 }
 
@@ -210,7 +200,7 @@ section[data-testid="stSidebar"] * {
     font-weight: 900;
     font-size: 20px;
     margin-bottom: 18px;
-    color: #ffffff;
+    color: white;
 }
 
 .empty-chat {
@@ -278,7 +268,10 @@ textarea {
 """)
 
 
-# Barra lateral izquierda
+# =====================================================
+# BARRA LATERAL
+# =====================================================
+
 with st.sidebar:
     st.html('<div class="sidebar-title">🧠 Aldanis AI</div>')
     st.html('<div class="nav-item">🏠 Inicio</div>')
@@ -288,17 +281,21 @@ with st.sidebar:
     st.html('<div class="nav-item">🕘 Historial</div>')
 
 
-# Variable de sesión para la pregunta actual
+# =====================================================
+# VARIABLES DE SESIÓN
+# =====================================================
+
 if "pregunta" not in st.session_state:
     st.session_state.pregunta = ""
 
-
-# Variable de sesión para el historial
 if "historial" not in st.session_state:
     st.session_state.historial = []
 
 
-# Encabezado principal visual
+# =====================================================
+# ENCABEZADO PRINCIPAL
+# =====================================================
+
 st.html("""
 <div class="main-hero">
     <div class="hero-badge">Proyecto universitario · IA + Cálculo + Voz</div>
@@ -332,11 +329,12 @@ st.html("""
 """)
 
 
-# Abre panel visual del historial
+# =====================================================
+# HISTORIAL DEL ASISTENTE
+# =====================================================
+
 st.html('<div class="glass-panel"><div class="section-title">🕘 Historial del asistente</div>')
 
-
-# Muestra mensaje inicial si no hay historial
 if len(st.session_state.historial) == 0:
     st.html("""
     <div class="empty-chat">
@@ -344,8 +342,6 @@ if len(st.session_state.historial) == 0:
         <p>Haz una pregunta escrita o por voz para iniciar la demostración del asistente.</p>
     </div>
     """)
-
-# Muestra historial si ya hay mensajes
 else:
     for mensaje in st.session_state.historial:
         st.html('<div class="chat-box">')
@@ -353,13 +349,10 @@ else:
         st.html(f'<div class="user-bubble">{mensaje["pregunta"]}</div>')
         st.html('<div class="msg-label">Asistente</div>')
 
-        # La respuesta se muestra con Markdown para conservar fórmulas y formato
         st.markdown(mensaje["respuesta"])
 
-        # Busca si hay función para graficar
         funcion_grafica = mensaje.get("funcion_grafica")
 
-        # Si hay función, genera gráfica
         if funcion_grafica:
             figura = crear_grafica(funcion_grafica)
 
@@ -370,20 +363,17 @@ else:
 
         st.html('</div>')
 
-
-# Cierra panel visual del historial
 st.html('</div>')
 
 
-# Abre panel de consulta
+# =====================================================
+# PANEL DE CONSULTA
+# =====================================================
+
 st.html('<div class="glass-panel"><div class="section-title">💬 Realiza una consulta</div>')
 
-
-# Columnas para texto y acciones
 col_texto, col_acciones = st.columns([4, 1.15], vertical_alignment="bottom")
 
-
-# Caja de texto
 with col_texto:
     if "texto_voz_pendiente" in st.session_state:
         st.session_state["pregunta"] = st.session_state["texto_voz_pendiente"]
@@ -396,8 +386,6 @@ with col_texto:
         height=120
     )
 
-
-# Botones y micrófono
 with col_acciones:
     texto_voz = speech_to_text(
         language="es",
@@ -407,22 +395,16 @@ with col_acciones:
         key="voz"
     )
 
-    preguntar = st.button(
-        "Enviar consulta",
-        use_container_width=True
-    )
+    preguntar = st.button("Enviar consulta", use_container_width=True)
+    borrar_historial = st.button("Limpiar chat", use_container_width=True)
 
-    borrar_historial = st.button(
-        "Limpiar chat",
-        use_container_width=True
-    )
-
-
-# Cierra panel de consulta
 st.html('</div>')
 
 
-# Panel de áreas de dominio
+# =====================================================
+# ÁREAS DE DOMINIO
+# =====================================================
+
 st.html("""
 <div class="glass-panel">
     <div class="section-title">⭐ Áreas de dominio</div>
@@ -447,31 +429,33 @@ st.html("""
 """)
 
 
-# Si el usuario habló por micrófono
+# =====================================================
+# FUNCIÓN PARA CORREGIR NÚMEROS DE VOZ
+# =====================================================
+
+def corregir_numeros_de_voz(texto):
+    # Busca números como 1.000, 5.400, 25.000 o 1.250.000
+    patron_miles = r"\b\d{1,3}(?:\.\d{3})+\b"
+
+    # Función interna que elimina los puntos usados como separador de miles
+    def quitar_puntos(coincidencia):
+        numero = coincidencia.group(0)
+        return numero.replace(".", "")
+
+    # Reemplaza todos los números encontrados
+    texto_corregido = re.sub(patron_miles, quitar_puntos, texto)
+
+    return texto_corregido
+
+
+# =====================================================
+# ACCIONES DEL USUARIO
+# =====================================================
+
 if texto_voz:
     st.session_state["texto_voz_pendiente"] = texto_voz
     st.rerun()
-    
-# Corrige de forma global números con punto como separador de miles
-def corregir_numeros_de_voz(texto):
-    # Busca números como 1.000, 5.400, 25.000, 100.000 o 1.250.000
-    patron_miles = r"\b\d{1,3}(?:\.\d{3})+\b"
 
-    # Función interna que elimina los puntos de miles
-    def quitar_puntos(coincidencia):
-        # Toma el número encontrado
-        numero = coincidencia.group(0)
-
-        # Elimina los puntos para convertirlo en número entero real
-        return numero.replace(".", "")
-
-    # Reemplaza todos los números encontrados en el texto
-    texto_corregido = re.sub(patron_miles, quitar_puntos, texto)
-
-    # Devuelve el texto corregido
-    return texto_corregido
-
-# Si el usuario limpia el historial
 if borrar_historial:
     st.session_state.historial = []
 
@@ -480,8 +464,6 @@ if borrar_historial:
 
     st.rerun()
 
-
-# Si el usuario envía una consulta
 if preguntar:
     pregunta_limpia = corregir_numeros_de_voz(
         st.session_state.pregunta.strip()
@@ -489,7 +471,6 @@ if preguntar:
 
     if pregunta_limpia == "":
         st.warning("Escribe una pregunta primero o usa el botón de voz.")
-
     else:
         try:
             with st.spinner("El asistente está razonando la respuesta..."):
