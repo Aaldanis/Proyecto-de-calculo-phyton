@@ -28,17 +28,15 @@ st.set_page_config(
 # =====================================================
 
 def fondo_video():
-    # URL directa del video en GitHub
-    # IMPORTANTE: el archivo debe llamarse fondo.mp4.mp4
-    video_url = "https://raw.githubusercontent.com/Aaldanis/Proyecto-de-calculo-phyton/cambios-prueba/fondo.mp4.mp4"
-
-    # Inserta el video como fondo sin convertirlo a base64
-    st.html(
-        f"""
-        <video autoplay muted loop playsinline id="video-fondo">
-            <source src="{video_url}" type="video/mp4">
-        </video>
+    # Inserta el video local como fondo.
+    # El archivo debe estar en la misma carpeta que frontend_moderno.py
+    st.markdown(
         """
+        <video autoplay muted loop playsinline preload="auto" id="video-fondo">
+            <source src="fondo.mp4.mp4" type="video/mp4">
+        </video>
+        """,
+        unsafe_allow_html=True
     )
 
 
@@ -65,6 +63,9 @@ st.html("""
     z-index: 0;
     opacity: 0.45;
     pointer-events: none;
+     /* Ayuda a que el video no se pause o parpadee en móviles */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
 }
 
 @media (max-width: 768px) {
