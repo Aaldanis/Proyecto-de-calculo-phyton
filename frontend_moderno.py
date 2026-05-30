@@ -1,4 +1,8 @@
-# Importa Streamlit para construir la interfaz web del asistente
+# =====================================================
+# IMPORTACIONES PRINCIPALES
+# =====================================================
+
+# Importa Streamlit para construir la interfaz web
 import streamlit as st
 
 # Importa re para corregir números con puntos de miles
@@ -7,14 +11,17 @@ import re
 # Importa funciones para detectar y crear gráficas matemáticas
 from graficador import extraer_funcion_para_graficar, crear_grafica
 
-# Importa la herramienta para convertir voz a texto
+# Importa la herramienta para grabar audio desde el micrófono
 from streamlit_mic_recorder import mic_recorder
 
 # Importa la función del backend que conecta con Gemini
 from backend import responder_con_gemini
 
 
-# Configuración general de la página
+# =====================================================
+# CONFIGURACIÓN GENERAL DE LA PÁGINA
+# =====================================================
+
 st.set_page_config(
     page_title="Asistente Virtual de Cálculo 1",
     page_icon="∫",
@@ -24,20 +31,14 @@ st.set_page_config(
 
 
 # =====================================================
-# FUNCIÓN PARA COLOCAR VIDEO DE FONDO OPTIMIZADO
+# FUNCIÓN PARA COLOCAR VIDEO DE FONDO
 # =====================================================
 
 def fondo_video():
     # URL directa del video subido en GitHub
-    # Se usa raw.githubusercontent para que Streamlit pueda cargarlo correctamente
     video_url = "https://raw.githubusercontent.com/Aaldanis/Proyecto-de-calculo-phyton/cambios-prueba/fondo.mp4.mp4"
 
-    # Inserta el video como fondo
-    # autoplay: inicia solo
-    # muted: necesario para que autoplay funcione
-    # loop: repite el video
-    # playsinline: evita que el celular lo abra en pantalla completa
-    # preload="auto": intenta precargarlo para que no quede negro
+    # Inserta el video como fondo de pantalla
     st.markdown(
         f"""
         <video autoplay muted loop playsinline preload="auto" id="video-fondo">
@@ -71,7 +72,6 @@ st.html("""
     z-index: 0;
     opacity: 0.45;
     pointer-events: none;
-     /* Ayuda a que el video no se pause o parpadee en móviles */
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
 }
@@ -294,9 +294,11 @@ with st.sidebar:
 # VARIABLES DE SESIÓN
 # =====================================================
 
+# Guarda la pregunta escrita por el usuario
 if "pregunta" not in st.session_state:
     st.session_state.pregunta = ""
 
+# Guarda el historial de preguntas y respuestas
 if "historial" not in st.session_state:
     st.session_state.historial = []
 
@@ -344,6 +346,7 @@ st.html("""
 
 st.html('<div class="glass-panel"><div class="section-title">🕘 Historial del asistente</div>')
 
+# Si no hay historial, muestra mensaje inicial
 if len(st.session_state.historial) == 0:
     st.html("""
     <div class="empty-chat">
@@ -352,16 +355,20 @@ if len(st.session_state.historial) == 0:
     </div>
     """)
 else:
+    # Recorre todas las preguntas y respuestas guardadas
     for mensaje in st.session_state.historial:
         st.html('<div class="chat-box">')
         st.html('<div class="msg-label">Usuario</div>')
         st.html(f'<div class="user-bubble">{mensaje["pregunta"]}</div>')
         st.html('<div class="msg-label">Asistente</div>')
 
+        # Muestra la respuesta del asistente
         st.markdown(mensaje["respuesta"])
 
+        # Verifica si la respuesta contiene una función para graficar
         funcion_grafica = mensaje.get("funcion_grafica")
 
+        # Si hay función, intenta crear y mostrar la gráfica
         if funcion_grafica:
             figura = crear_grafica(funcion_grafica)
 
@@ -381,13 +388,11 @@ st.html('</div>')
 
 st.html('<div class="glass-panel"><div class="section-title">💬 Realiza una consulta</div>')
 
+# Crea dos columnas: una para texto y otra para botones
 col_texto, col_acciones = st.columns([4, 1.15], vertical_alignment="bottom")
 
 with col_texto:
-    if "texto_voz_pendiente" in st.session_state:
-        st.session_state["pregunta"] = st.session_state["texto_voz_pendiente"]
-        del st.session_state["texto_voz_pendiente"]
-
+    # Área donde el usuario escribe su pregunta
     st.text_area(
         "Escribe tu pregunta:",
         key="pregunta",
@@ -396,16 +401,23 @@ with col_texto:
     )
 
 with col_acciones:
-        audio = mic_recorder(
-            start_prompt="🎤 Hablar",
-            stop_prompt="⏹️ Detener",
-            just_once=True,
-            key="voz"
-)
+    # Botón para grabar audio desde el micrófono
+    audio = mic_recorder(
+        start_prompt="🎤 Hablar",
+        stop_prompt="⏹️ Detener",
+        just_once=True,
+        key="voz"
+    )
 
-st.write(audio)
+    # Muestra temporalmente el resultado del micrófono
+    # Si aparece None, no está grabando correctamente
+    # Si aparece un diccionario con datos, el micrófono sí está funcionando
+    st.write(audio)
 
+    # Botón para enviar consulta escrita
     preguntar = st.button("Enviar consulta", use_container_width=True)
+
+    # Botón para limpiar historial
     borrar_historial = st.button("Limpiar chat", use_container_width=True)
 
 st.html('</div>')
@@ -440,7 +452,7 @@ st.html("""
 
 
 # =====================================================
-# FUNCIÓN PARA CORREGIR NÚMEROS DE VOZ
+# FUNCIÓN PARA CORREGIR NÚMEROS DE VOZ O TEXTO
 # =====================================================
 
 def corregir_numeros_de_voz(texto):
@@ -459,44 +471,55 @@ def corregir_numeros_de_voz(texto):
 
 
 # =====================================================
-# ACCIONES DEL USUARIO
+# ACCIÓN PARA LIMPIAR HISTORIAL
 # =====================================================
 
-if texto_voz:
-    st.session_state["texto_voz_pendiente"] = texto_voz
-    st.rerun()
-
 if borrar_historial:
+    # Limpia el historial guardado
     st.session_state.historial = []
 
+    # Limpia la pregunta escrita
     if "pregunta" in st.session_state:
         del st.session_state["pregunta"]
 
+    # Recarga la app
     st.rerun()
 
+
+# =====================================================
+# ACCIÓN PARA ENVIAR CONSULTA
+# =====================================================
+
 if preguntar:
+    # Limpia la pregunta escrita
     pregunta_limpia = corregir_numeros_de_voz(
         st.session_state.pregunta.strip()
     )
 
+    # Valida que el usuario haya escrito algo
     if pregunta_limpia == "":
         st.warning("Escribe una pregunta primero o usa el botón de voz.")
     else:
         try:
+            # Muestra mensaje de carga mientras el backend responde
             with st.spinner("El asistente está razonando la respuesta..."):
                 respuesta_final = responder_con_gemini(pregunta_limpia)
                 funcion_grafica = extraer_funcion_para_graficar(respuesta_final)
 
+            # Guarda pregunta, respuesta y posible gráfica en historial
             st.session_state.historial.append({
                 "pregunta": pregunta_limpia,
                 "respuesta": respuesta_final,
                 "funcion_grafica": funcion_grafica
             })
 
+            # Limpia el área de pregunta
             if "pregunta" in st.session_state:
                 del st.session_state["pregunta"]
 
+            # Recarga la app para mostrar el nuevo historial
             st.rerun()
 
         except Exception as error:
+            # Muestra error si algo falla
             st.error(f"Ocurrió un error: {error}")
