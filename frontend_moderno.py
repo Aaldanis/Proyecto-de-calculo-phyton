@@ -396,11 +396,11 @@ with col_texto:
     )
 
 with col_acciones:
-     audio = mic_recorder(
-        start_prompt="🎤 Hablar",
-        stop_prompt="⏹️ Detener",
-        just_once=True,
-        key="voz"
+        audio = mic_recorder(
+            start_prompt="🎤 Hablar",
+            stop_prompt="⏹️ Detener",
+            just_once=True,
+            key="voz"
 )
 
 st.write(audio)
